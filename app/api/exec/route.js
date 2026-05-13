@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { Bash } from "just-bash";
+import { exec } from "child_process";
+import { promisify } from "util";
+
+const execAsync = promisify(exec);
 
 export async function POST(request) {
   try {
@@ -12,17 +15,18 @@ export async function POST(request) {
       );
     }
 
-    const bash = new Bash();
-    const result = await bash.exec(command, { timeout });
+    const result = await execAsync(command, { timeout });
 
     return NextResponse.json({
       stdout: result.stdout,
       stderr: result.stderr,
-      exitCode: result.exitCode,
+      exitCode: 0,
     });
   } catch (error) {
+    const stdout = error.stdout || "";
+    const stderr = error.stderr || "";
     return NextResponse.json(
-      { error: error.message, stdout: "", stderr: "", exitCode: 1 },
+      { stdout, stderr, exitCode: error.code || 1, error: error.message },
       { status: 500 }
     );
   }
