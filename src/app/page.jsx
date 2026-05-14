@@ -1,16 +1,32 @@
 'use client'
 
+import { useState } from 'react'
+
+const screenshots = [
+  { src: '/screenshots/main-screen.png', alt: 'TalkinClaw main screen', caption: 'Main screen — press to speak' },
+  { src: '/screenshots/review-screen.png', alt: 'Review transcript before sending', caption: 'Review your transcribed request before sending' },
+  { src: '/screenshots/response-screen.png', alt: 'Agent response displayed and spoken aloud', caption: 'AI response — read it or hear it' },
+  { src: '/screenshots/settings-screen.png', alt: 'Server configuration settings', caption: 'Configure any OpenAI-compatible backend' },
+]
+
 export default function Home() {
+  const [lightbox, setLightbox] = useState(null)
+
   const features = [
-    { title: 'On-Device Speech Recognition', desc: 'Powered by sherpa-onnx Whisper, all speech-to-text runs locally on your Android device. No cloud dependency, no data leakage.', icon: '🎙️' },
-    { title: 'Natural Voice Output', desc: 'Kokoro neural TTS generates lifelike speech from your AI responses. Or switch to Piper for a lightweight alternative.', icon: '🔊' },
+    { title: 'On-Device Speech Recognition', desc: 'Powered by sherpa-onnx Whisper, all speech-to-text runs locally on your Android device. No cloud dependency, no data leakage. Models download automatically on first launch (~50 MB).', icon: '🎙️' },
+    { title: 'Natural Voice Output', desc: 'Kokoro neural TTS generates lifelike speech from your AI responses. Or switch to Piper for a lightweight alternative. Both run entirely on-device.', icon: '🔊' },
     { title: '100% Private by Design', desc: 'Your voice never leaves your phone. Your AI runs on hardware you control. No accounts, no subscriptions, no tracking.', icon: '🔒' },
+    { title: 'Built for OpenClaw', desc: 'Designed to work seamlessly with OpenClaw, but compatible with any backend that speaks the OpenAI chat format — Ollama, LiteLLM, vLLM, and more.', icon: '🤖' },
+    { title: 'Transcript Display', desc: 'Every response is both spoken aloud and displayed as text on screen. Review the conversation history at a glance.', icon: '📋' },
+    { title: 'Apache 2.0 Licensed', desc: 'Fully open-source. Free to use, modify, and distribute. No vendor lock-in, no paid tiers, no telemetry.', icon: '📜' },
   ]
+
   const steps = [
-    { num: '01', title: 'Download', desc: 'Install TalkinClaw from GitLab. On first launch, models download automatically (~50MB STT, ~98MB TTS).' },
+    { num: '01', title: 'Download', desc: 'Install TalkinClaw from GitLab. On first launch, models download automatically (~50 MB STT, ~98 MB TTS).' },
     { num: '02', title: 'Connect', desc: 'Point the app to your server URL — Ollama, LiteLLM, vLLM, or any OpenAI-compatible backend.' },
     { num: '03', title: 'Speak', desc: 'Tap the button, say what you need. Hear the response played back through Kokoro neural TTS.' },
   ]
+
   return (
     <div className="min-h-screen bg-zinc-900 text-zinc-100 antialiased">
       {/* Hero */}
@@ -59,6 +75,57 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Screenshots Gallery */}
+      <section className="py-20">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-semibold text-white">See It In Action</h2>
+            <p className="mt-4 text-zinc-400 text-lg">Real screenshots from the TalkinClaw app on Android.</p>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {screenshots.map((s, i) => (
+              <button
+                key={i}
+                onClick={() => setLightbox(s)}
+                className="group relative rounded-xl overflow-hidden ring-1 ring-white/10 hover:ring-emerald-400/50 transition-all cursor-pointer"
+              >
+                <img
+                  src={s.src}
+                  alt={s.alt}
+                  className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <p className="text-xs text-white/90 font-medium">{s.caption}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+          <p className="text-center mt-8 text-zinc-500 text-sm">
+            Tap any screenshot to preview — all images captured from the actual app.
+          </p>
+        </div>
+      </section>
+
+      {/* Lightbox */}
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+          onClick={() => setLightbox(null)}
+        >
+          <div className="max-w-3xl max-h-[90vh] rounded-xl overflow-hidden ring-1 ring-white/10 shadow-2xl">
+            <img
+              src={lightbox.src}
+              alt={lightbox.alt}
+              className="w-full h-auto max-h-[85vh] object-contain"
+            />
+            <div className="bg-zinc-800 px-6 py-3 text-center text-sm text-zinc-300">
+              {lightbox.caption}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Features */}
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -95,6 +162,87 @@ export default function Home() {
                 <p className="text-zinc-400 leading-relaxed">{s.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Architecture */}
+      <section className="py-20">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
+              <h2 className="text-3xl font-semibold text-white">Powered by On-Device AI</h2>
+              <p className="text-zinc-400 leading-relaxed">
+                TalkinClaw brings together several state-of-the-art open-source models to create a seamless voice experience.
+              </p>
+              <ul className="space-y-4">
+                <li className="flex gap-3">
+                  <span className="text-emerald-400 font-bold">•</span>
+                  <div>
+                    <strong className="text-white">sherpa-onnx</strong>
+                    <span className="text-zinc-400 block text-sm">On-device Whisper STT and neural TTS inference. All speech processing stays on your phone.</span>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-emerald-400 font-bold">•</span>
+                  <div>
+                    <strong className="text-white">Kokoro</strong>
+                    <span className="text-zinc-400 block text-sm">Neural text-to-speech model that generates natural, lifelike voice output from your AI responses.</span>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-emerald-400 font-bold">•</span>
+                  <div>
+                    <strong className="text-white">Piper (alternative)</strong>
+                    <span className="text-zinc-400 block text-sm">Lightweight TTS option when you need a smaller, faster voice synthesis model.</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div className="rounded-xl bg-zinc-800/50 ring-1 ring-white/10 p-8">
+              <h3 className="text-lg font-semibold text-white mb-4">Compatible Backends</h3>
+              <p className="text-zinc-400 text-sm mb-6">
+                TalkinClaw works with any backend that speaks the OpenAI chat format:
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {['Ollama', 'LiteLLM', 'vLLM', 'OpenClaw', 'OpenAI API', 'Anthropic', 'Gemini', 'Claude'].map((backend) => (
+                  <span key={backend} className="inline-flex items-center rounded-full bg-zinc-700/50 px-3 py-1 text-xs font-medium text-zinc-300 ring-1 ring-white/10">
+                    {backend}
+                  </span>
+                ))}
+              </div>
+              <p className="text-zinc-500 text-xs mt-4">
+                Any server that implements the OpenAI chat completions endpoint can serve as a backend.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Setup */}
+      <section className="py-20 bg-zinc-800/30">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-semibold text-white">Get Started in Minutes</h2>
+            <p className="mt-4 text-zinc-400 text-lg">Download, configure, and start chatting with your AI.</p>
+          </div>
+          <div className="max-w-2xl mx-auto space-y-6">
+            <div className="rounded-xl bg-zinc-800/50 ring-1 ring-white/10 p-6">
+              <h3 className="text-white font-semibold mb-2">1. Download the APK</h3>
+              <p className="text-zinc-400 text-sm">Grab the latest release from GitLab. No account, no sign-up, no permissions required beyond microphone access.</p>
+            </div>
+            <div className="rounded-xl bg-zinc-800/50 ring-1 ring-white/10 p-6">
+              <h3 className="text-white font-semibold mb-2">2. Models Download Automatically</h3>
+              <p className="text-zinc-400 text-sm">On first launch, the app downloads ~50 MB for speech-to-text (Whisper) and ~98 MB for text-to-speech (Kokoro). One-time, on-device.</p>
+            </div>
+            <div className="rounded-xl bg-zinc-800/50 ring-1 ring-white/10 p-6">
+              <h3 className="text-white font-semibold mb-2">3. Connect to Your Server</h3>
+              <p className="text-zinc-400 text-sm">Enter your server URL in the settings screen. Supports Ollama, LiteLLM, vLLM, or any OpenAI-compatible endpoint. Self-hosted or remote.</p>
+            </div>
+            <div className="rounded-xl bg-zinc-800/50 ring-1 ring-white/10 p-6">
+              <h3 className="text-white font-semibold mb-2">4. Start Talking</h3>
+              <p className="text-zinc-400 text-sm">Press the microphone button, speak your request, and hear the AI response read aloud. Review transcripts on screen at any time.</p>
+            </div>
           </div>
         </div>
       </section>
