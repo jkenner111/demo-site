@@ -3,4 +3,14 @@
 @theme {
   --font-sans: Inter, sans-serif;
   --font-sans--font-feature-settings: 'cv11';
+  --color-emerald-400: #34d399;
+  --color-emerald-300: #6ee7b1;
+  --color-zinc-800: #27272a;
+  --color-zinc-900: #18181b;
+}
+
+@layer base {
+  body {
+    @apply bg-zinc-900 text-zinc-100 antialiased;
+  }
 }
