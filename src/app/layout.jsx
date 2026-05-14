@@ -1,11 +1,8 @@
 import '@/styles/tailwind.css'
 
 export const metadata = {
-  title: {
-    template: '%s - Catalyst',
-    default: 'Catalyst',
-  },
-  description: '',
+  title: 'Demo',
+  description: 'A demo site',
 }
 
 export default async function RootLayout({ children }) {
